@@ -58,9 +58,11 @@ const About = () => {
                     labeled as Normal, Viral Pneumonia, or Bacterial Pneumonia.
                   </p>
                   <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm overflow-x-auto">
-                    <code className="text-primary">import</code> kagglehub<br />
-                    path = kagglehub.dataset_download(<code className="text-success">"paultimothymooney/chest-xray-pneumonia"</code>)<br />
-                    <code className="text-primary">print</code>(<code className="text-success">"Path to dataset files:"</code>, path)
+                    <pre className="text-foreground">
+                      <span className="text-primary">import</span> kagglehub{'\n'}
+                      path = kagglehub.dataset_download(<span className="text-success">"paultimothymooney/chest-xray-pneumonia"</span>){'\n'}
+                      <span className="text-primary">print</span>(<span className="text-success">"Path to dataset files:"</span>, path)
+                    </pre>
                   </div>
                 </div>
               </div>
