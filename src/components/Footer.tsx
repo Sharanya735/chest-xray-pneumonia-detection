@@ -10,7 +10,7 @@ const Footer = () => {
     >
       <div className="container mx-auto px-4 text-center">
         <p className="text-sm text-primary-foreground">
-          © 2025 MediScan AI. Powered by AI & FastAPI.
+          © 2025 PneumoScan. Powered by AI & FastAPI.
         </p>
         <p className="text-xs text-primary-foreground/80 mt-1">
           For research and educational purposes only. Not for clinical use.

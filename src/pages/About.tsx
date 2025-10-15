@@ -10,7 +10,7 @@ const About = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <h1 className="text-4xl font-bold text-center mb-4">About MediScan AI</h1>
+        <h1 className="text-4xl font-bold text-center mb-4">About PneumoScan</h1>
         <p className="text-center text-muted-foreground mb-12 text-lg">
           Empowering radiology through deep learning
         </p>

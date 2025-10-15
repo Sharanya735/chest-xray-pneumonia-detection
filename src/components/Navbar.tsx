@@ -19,7 +19,7 @@ const Navbar = () => {
             <div className="p-2 bg-gradient-medical rounded-lg group-hover:shadow-glow transition-all duration-300">
               <Activity className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl text-foreground">MediScan AI</span>
+            <span className="font-bold text-xl text-foreground">PneumoScan</span>
           </Link>
           
           <div className="flex items-center gap-6">
