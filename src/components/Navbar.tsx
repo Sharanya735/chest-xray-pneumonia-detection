@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Activity } from "lucide-react";
+import { ScanLine } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
@@ -16,8 +16,8 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-gradient-medical rounded-lg group-hover:shadow-glow transition-all duration-300">
-              <Activity className="h-6 w-6 text-primary-foreground" />
+            <div className="p-2 bg-gradient-medical rounded-xl group-hover:shadow-glow transition-all duration-300">
+              <ScanLine className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="font-bold text-xl text-foreground">PneumoScan</span>
           </Link>
