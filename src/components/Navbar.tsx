@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { ScanLine } from "lucide-react";
 import { motion } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -15,10 +15,12 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-gradient-medical rounded-xl group-hover:shadow-glow transition-all duration-300">
-              <ScanLine className="h-6 w-6 text-primary-foreground" />
-            </div>
+          <Link to="/" className="flex items-center gap-3 group">
+            <img 
+              src={logo} 
+              alt="PneumoScan Logo" 
+              className="h-12 w-12 object-contain group-hover:scale-110 transition-transform duration-300"
+            />
             <span className="font-bold text-xl text-foreground">PneumoScan</span>
           </Link>
           
