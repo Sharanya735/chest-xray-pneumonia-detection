@@ -1,11 +1,17 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload as UploadIcon, X, CheckCircle, AlertTriangle, XCircle } from "lucide-react";
+import { Upload as UploadIcon, X, CheckCircle, AlertTriangle, XCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/components/Loader";
 import ConfidenceGauge from "@/components/ConfidenceGauge";
+import StepProgress from "@/components/StepProgress";
+import ModelInfoModal from "@/components/ModelInfoModal";
+import CameraCapture from "@/components/CameraCapture";
+import ConfidenceAlert from "@/components/ConfidenceAlert";
+import { generatePDFReport } from "@/utils/reportGenerator";
+import { useTranslation } from "react-i18next";
 
 interface PredictionResult {
   prediction: string;
@@ -18,7 +24,9 @@ const Upload = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -49,6 +57,7 @@ const Upload = () => {
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
     setResult(null);
+    setCurrentStep(1);
     
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -68,6 +77,7 @@ const Upload = () => {
     if (!selectedFile) return;
 
     setIsAnalyzing(true);
+    setCurrentStep(2);
     
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -82,6 +92,7 @@ const Upload = () => {
 
       const data: PredictionResult = await response.json();
       setResult(data);
+      setCurrentStep(3);
       
       // Save to history
       const history = JSON.parse(localStorage.getItem('scanHistory') || '[]');
@@ -102,6 +113,7 @@ const Upload = () => {
         description: "Unable to connect to the API. Please ensure the FastAPI server is running.",
         variant: "destructive"
       });
+      setCurrentStep(1);
     } finally {
       setIsAnalyzing(false);
     }
@@ -111,6 +123,22 @@ const Upload = () => {
     setSelectedFile(null);
     setPreview(null);
     setResult(null);
+    setCurrentStep(1);
+  };
+
+  const downloadReport = () => {
+    if (!result || !preview) return;
+    setCurrentStep(4);
+    generatePDFReport({
+      prediction: result.prediction,
+      confidence: result.confidence,
+      imageData: preview,
+      date: new Date(),
+    });
+    toast({
+      title: "Report Downloaded",
+      description: "Your PDF report has been generated successfully",
+    });
   };
 
   const getResultConfig = (prediction: string) => {
@@ -131,10 +159,15 @@ const Upload = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto"
       >
-        <h1 className="text-4xl font-bold text-center mb-3">Upload X-Ray Image</h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-4xl font-bold">{t("upload.title")}</h1>
+          <ModelInfoModal />
+        </div>
         <p className="text-center text-muted-foreground mb-8">
-          Upload a chest X-ray for AI-powered pneumonia detection
+          {t("upload.subtitle")}
         </p>
+        
+        <StepProgress currentStep={currentStep} />
 
         <Card className="p-8 shadow-soft">
           <AnimatePresence mode="wait">
@@ -159,23 +192,26 @@ const Upload = () => {
                   </div>
                   <div>
                     <p className="text-lg font-medium mb-2">
-                      Drop your X-ray image here, or click to browse
+                      {t("upload.dropzone")}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Supports JPG, JPEG, PNG (Max 10MB)
                     </p>
                   </div>
-                  <Button asChild>
-                    <label className="cursor-pointer">
-                      Select File
-                      <input
-                        type="file"
-                        className="hidden"
-                        accept="image/jpeg,image/jpg,image/png"
-                        onChange={handleFileInput}
-                      />
-                    </label>
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button asChild>
+                      <label className="cursor-pointer">
+                        Select File
+                        <input
+                          type="file"
+                          className="hidden"
+                          accept="image/jpeg,image/jpg,image/png"
+                          onChange={handleFileInput}
+                        />
+                      </label>
+                    </Button>
+                    <CameraCapture onCapture={handleFileSelect} />
+                  </div>
                 </div>
               </motion.div>
             ) : (
@@ -216,6 +252,8 @@ const Upload = () => {
                           const ResultIcon = config.icon;
                           return (
                             <>
+                              <ConfidenceAlert confidence={result.confidence * 100} />
+                              
                               <div className="text-center">
                                 <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 ${
                                   config.color === 'success' ? 'bg-success/10 text-success' :
@@ -238,13 +276,22 @@ const Upload = () => {
                                 </p>
                               </div>
 
-                              <Button 
-                                onClick={reset}
-                                variant="outline"
-                                className="w-full"
-                              >
-                                Upload Another Image
-                              </Button>
+                              <div className="space-y-2">
+                                <Button 
+                                  onClick={downloadReport}
+                                  className="w-full"
+                                >
+                                  <Download className="mr-2 h-4 w-4" />
+                                  {t("results.downloadReport")}
+                                </Button>
+                                <Button 
+                                  onClick={reset}
+                                  variant="outline"
+                                  className="w-full"
+                                >
+                                  {t("upload.uploadAnother")}
+                                </Button>
+                              </div>
                             </>
                           );
                         })()}
@@ -258,14 +305,14 @@ const Upload = () => {
                             className="w-full bg-primary hover:bg-primary/90 shadow-glow"
                             size="lg"
                           >
-                            Analyze Image
+                            {t("upload.analyze")}
                           </Button>
                           <Button 
                             onClick={reset}
                             variant="outline"
                             className="w-full"
                           >
-                            Cancel
+                            {t("upload.cancel")}
                           </Button>
                         </div>
                       </div>

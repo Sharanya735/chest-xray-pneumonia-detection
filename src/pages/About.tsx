@@ -1,8 +1,35 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import { Database, Brain, Shield, Code } from "lucide-react";
+import { Database, Brain, Shield, Code, Heart, Microscope, Stethoscope } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t } = useTranslation();
+
+  const learningCards = [
+    {
+      icon: Heart,
+      title: "What is Pneumonia?",
+      description:
+        "Pneumonia is an infection that inflames the air sacs in one or both lungs. The air sacs may fill with fluid or pus, causing symptoms like cough, fever, chills, and difficulty breathing.",
+      color: "destructive",
+    },
+    {
+      icon: Microscope,
+      title: "Viral vs Bacterial",
+      description:
+        "Bacterial pneumonia is typically more severe and caused by bacteria like Streptococcus pneumoniae. Viral pneumonia is usually milder and caused by viruses like influenza or RSV. Treatment differs significantly.",
+      color: "warning",
+    },
+    {
+      icon: Stethoscope,
+      title: "X-Ray Detection",
+      description:
+        "Chest X-rays help detect pneumonia by showing areas of opacity or infiltrates in the lungs. AI models can identify patterns invisible to the human eye, improving early detection and diagnosis accuracy.",
+      color: "primary",
+    },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <motion.div
@@ -125,6 +152,56 @@ const About = () => {
                 </div>
               </div>
             </Card>
+          </motion.div>
+
+          {/* Interactive Learning Section */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-12"
+          >
+            <h2 className="text-3xl font-bold text-center mb-8">
+              Understanding Pneumonia
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {learningCards.map((card, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <Card className="p-6 h-full shadow-soft hover:shadow-glow transition-all duration-300">
+                    <div
+                      className={`p-3 rounded-xl inline-block mb-4 ${
+                        card.color === "destructive"
+                          ? "bg-destructive/10"
+                          : card.color === "warning"
+                          ? "bg-warning/10"
+                          : "bg-primary/10"
+                      }`}
+                    >
+                      <card.icon
+                        className={`h-6 w-6 ${
+                          card.color === "destructive"
+                            ? "text-destructive"
+                            : card.color === "warning"
+                            ? "text-warning"
+                            : "text-primary"
+                        }`}
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">{card.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {card.description}
+                    </p>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </motion.div>
