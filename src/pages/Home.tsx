@@ -62,27 +62,15 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Button 
-                onClick={() => navigate('/upload')}
+                onClick={() => navigate(user ? '/upload' : '/auth')}
                 size="lg"
                 className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-glow group"
               >
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
-              {!user && (
-                <Button 
-                  onClick={() => navigate('/auth')}
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-8 py-6"
-                >
-                  Login / Sign Up
-                </Button>
-              )}
             </motion.div>
           </motion.div>
         </div>
