@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Zap, Target } from "lucide-react";
 import heroImage from "@/assets/hero-medical.jpg";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   return (
     <div className="min-h-screen">
@@ -60,6 +62,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Button 
                 onClick={() => navigate('/upload')}
@@ -69,6 +72,17 @@ const Home = () => {
                 Get Started
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
+              
+              {!user && (
+                <Button 
+                  onClick={() => navigate('/auth')}
+                  size="lg"
+                  variant="outline"
+                  className="text-lg px-8 py-6"
+                >
+                  Login / Sign Up
+                </Button>
+              )}
             </motion.div>
           </motion.div>
         </div>

@@ -4,9 +4,13 @@ import logo from "@/assets/logo.png";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "./ui/button";
+import { LogOut, User } from "lucide-react";
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
   
   const isActive = (path: string) => location.pathname === path;
   
@@ -60,6 +64,33 @@ const Navbar = () => {
             >
               History
             </Link>
+            
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <User className="h-4 w-4" />
+                  <span className="hidden sm:inline">{user.email}</span>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={signOut}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <Link to="/auth">
+                <Button variant="default" size="sm">
+                  Login
+                </Button>
+              </Link>
+            )}
+            
+            <ThemeToggle />
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
