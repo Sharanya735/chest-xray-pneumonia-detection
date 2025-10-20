@@ -85,7 +85,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-4">Why Choose MediScan AI?</h2>
+            <h2 className="text-4xl font-bold mb-4">Why Choose PneumoScan AI?</h2>
             <p className="text-muted-foreground text-lg">Advanced AI technology for accurate medical imaging analysis</p>
           </motion.div>
           
