@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import RequireAuth from "./components/RequireAuth";
 
 const queryClient = new QueryClient();
 
@@ -33,7 +34,7 @@ const App = () => (
                   <Route path="/" element={<Home />} />
                   <Route path="/upload" element={<Upload />} />
                   <Route path="/about" element={<About />} />
-                  <Route path="/history" element={<History />} />
+                  <Route path="/history" element={<RequireAuth><History /></RequireAuth>} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="*" element={<NotFound />} />
