@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Zap, Target } from "lucide-react";
 import heroImage from "@/assets/hero-medical.jpg";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   return (
     <div className="min-h-screen">
@@ -62,7 +64,7 @@ const Home = () => {
               transition={{ delay: 0.5 }}
             >
               <Button 
-                onClick={() => navigate('/upload')}
+                onClick={() => navigate(user ? '/upload' : '/auth')}
                 size="lg"
                 className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-glow group"
               >
