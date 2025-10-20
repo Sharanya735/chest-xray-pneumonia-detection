@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import ThemeToggle from "./ThemeToggle";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "./ui/button";
 import { LogOut, User } from "lucide-react";
